@@ -9,7 +9,7 @@ router.get("/", isValidUser, async (req, res) => {
     const user = await findUserIdFromToken(req);
     const interest = req.query.interest;
     const page = req.query.page;
-    console.log(user._id);
+    // console.log(user._id);
     const posts = await getBookmarkedPosts(user, interest, page);
     res.status(200).send(posts);
   } catch (error) {

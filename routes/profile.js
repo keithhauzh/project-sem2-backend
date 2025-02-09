@@ -36,10 +36,11 @@ router.get("/", isValidUser, async (req, res) => {
 router.put("/edit", isValidUser, async (req, res) => {
   try {
     const name = req.body.name;
+    const bio = req.body.bio;
     const title = req.body.title;
     const color = req.body.color;
     const user = (await findUserIdFromToken(req)).toString();
-    const editedProfile = await editProfile(name, title, color, user);
+    const editedProfile = await editProfile(name, bio, title, color, user, bio);
     // console.log(editedProfile);
     res.status(200).send(editedProfile);
   } catch (error) {

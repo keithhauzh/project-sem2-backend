@@ -31,36 +31,53 @@ const getPost = async (id) => {
 
 const addPost = async (user, title, content, interest) => {
   try {
-    const newPost = new Post({ user, title, content, interest });
-    await newPost.save();
+    if (interest && interest !== "") {
+      const newPost = new Post({ user, title, content, interest });
+      await newPost.save();
+      const userId = await User.findById(user);
 
-    const userId = await User.findById(user);
+      if (!userId) {
+        throw new Error("User not found :(");
+      }
 
-    if (!userId) {
-      throw new Error("User not found :(");
+      if (userId.posts.includes(newPost._id)) {
+        throw new Error("Post_id already added to user!");
+      }
+
+      userId.posts.push(newPost._id);
+      await userId.save();
+
+      return newPost;
+    } else {
+      const newPost = new Post({ user, title, content });
+      await newPost.save();
+      const userId = await User.findById(user);
+
+      if (!userId) {
+        throw new Error("User not found :(");
+      }
+
+      if (userId.posts.includes(newPost._id)) {
+        throw new Error("Post_id already added to user!");
+      }
+
+      userId.posts.push(newPost._id);
+      await userId.save();
+
+      return newPost;
     }
-
-    if (userId.posts.includes(newPost._id)) {
-      throw new Error("Post_id already added to user!");
-    }
-
-    userId.posts.push(newPost._id);
-    await userId.save();
-
-    return newPost;
   } catch (error) {
     console.error("Error adding post:", error.message);
     throw new Error(error.message);
   }
 };
 
-const editPost = async (id, title, content, interest) => {
+const editPost = async (id, title, content) => {
   const editedPost = await Post.findByIdAndUpdate(
     id,
     {
       title,
       content,
-      interest,
     },
     { new: true }
   );
@@ -83,16 +100,8 @@ const deletePost = async (id, loggedUserId) => {
 
   if (!profile) {
     throw new Error("User not found :(");
-  }
-
-  if (profile.posts.includes(id)) {
-    profile.posts.filter((post) => {
-      post !== id;
-    });
-    await profile.save();
-    return await Post.findByIdAndDelete(id);
   } else {
-    throw new Error("Post was not found :(");
+    return await Post.findByIdAndDelete(id);
   }
 };
 

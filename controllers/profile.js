@@ -3,12 +3,13 @@ const User = require("../models/user");
 const getProfile = async (id) => {
   const user = await User.findById(id);
   if (!user) {
-    console.log(id);
+    // console.log(id);
     throw new Error("User does not exist");
   }
   const userData = {
     name: user.name,
     email: user.email,
+    bio: user.bio,
     title: user.specialTitle,
     color: user.premium_color,
   };
@@ -20,11 +21,12 @@ const getSelfProfile = async (user) => {
   return selectedUser;
 };
 
-const editProfile = async (name, title = "", color, user) => {
+const editProfile = async (name, bio = "", title = "", color, user) => {
   const editedProfile = await User.findByIdAndUpdate(
     user,
     {
       name,
+      bio,
       specialTitle: title,
       premium_color: color,
     },

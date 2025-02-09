@@ -6,6 +6,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   bookmarks: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  bio: { type: String, required: false },
   role: { type: String, enum: ["user", "admin"], default: "user" },
   specialTitle: { type: String, required: false },
   premium_id: { type: String, required: false },

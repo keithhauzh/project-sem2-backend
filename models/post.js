@@ -4,7 +4,7 @@ const postSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
   title: { type: String, required: true },
   content: { type: String, required: true },
-  interest: { type: Schema.Types.ObjectId, ref: "Interest" },
+  interest: { type: Schema.Types.ObjectId, ref: "Interest", required: false },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   bookmarks: [{ type: Schema.Types.ObjectId, ref: "User" }],

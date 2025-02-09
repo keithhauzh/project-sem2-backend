@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-// const {isAdmin} = require("../middleware/auth")
 const {
   getPosts,
   getPost,
@@ -55,7 +54,7 @@ router.post("/", isValidUser, async (req, res) => {
     const content = req.body.content;
     const interest = req.body.interest;
 
-    if (!user || !title || !content || !interest) {
+    if (!user || !title || !content) {
       {
         return res.status(400).send({ error: "Required data is missing" });
       }
@@ -63,7 +62,7 @@ router.post("/", isValidUser, async (req, res) => {
     const newPost = await addPost(user, title, content, interest);
     res.status(200).send(newPost);
   } catch (error) {
-    // console.log(error)
+    console.log(error);
     res.status(400).send({
       error: error.message,
     });
